@@ -3,10 +3,31 @@
 {% block content %}
 <h1>Lobby</h1>
 
-<section id="form-container">
-    <img id="logo" src="{% static 'images/chat-icon.png' %}" alt="">
-        <h1>Hoşgeldiniz!</h1>
-        <p>Senin için görüntülü görüşme uygulaması</p>
+<main>
+    <section id="form-container">
+        <img id="logo" src="{% static 'images/chat-icon.png' %}" alt="">
+        <div>
+            <h1>Hoşgeldiniz!</h1>
+            <p>Senin için görüntülü görüşme uygulaması</p>
+        </div>
+    
+        <form id="form">
+            <div class="form-field">
+                <input type="submit" value="Katıl">
+            </div>
+        </form>
+    </section>
+</main>
 
-</section>
+<script type="text/javascript">
+    let form = document.getElementById("form")
+
+    let handleSubmit = async (e) => {
+        e.preventDefault()
+        window.open('/room/', '_self')
+    }
+    handleSubmit()
+    form.addEventListener('submit', handleSubmit)
+
+</script>
 {% endblock %}
