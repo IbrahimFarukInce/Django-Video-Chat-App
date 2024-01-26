@@ -1,6 +1,6 @@
 const APP_ID = 'e7eeff558045424890ad1e38fc511246'
-const CHANNEL = 'main'
-const TOKEN = '007eJxTYPhj6nym/DqDyk1n39iryzRX7T2b+CSYd7ePebZmxXfbAhkFhlTz1NS0NFNTCwMTUxMjEwtLg8QUw1Rji7RkU0NDIxOzm8s2pjYEMjIEbGZnYIRCEJ+FITcxM4+BAQAmhR6a'
+const CHANNEL = 'local'
+const TOKEN = '007eJxTYGDW3/Kn/LfK4v4F/8tbFm7W/NIzk1ElfUrNFbfHUx4eWVKjwJBqnpqalmZqamFgYmpiZGJhaZCYYphqbJGWbGpoaGRidufPptSGQEYGwXN3WBgZIBDEZ2XIyU9OzGFgAAA1AyLd'
 let UID;
 
 const client = AgoraRTC.createClient({mode:'rtc', codec:'vp8'})
@@ -58,4 +58,40 @@ let handeUserLeft = async (user) =>{
     document.getElementById(`user-container-${user.uid}`).remove()
 }
 
+let leaveAndRemoveLocalStream = async() => {
+    for (let i=0; localTracks.length > i; i++){
+        localTracks[i].stop()
+        localTracks[i].close()
+    }
+
+    await client.leave()
+    window.open('/', '_self')
+}
+
+let toggleCamera = async (event) => {
+    if (localTracks[1].muted) {
+        await localTracks[1].setMuted(false)
+        event.target.style.background = '#fff'
+    } else{
+        await localTracks[1].setMuted(true)
+        event.target.style.background = 'rgba(255, 80, 80)'
+    }
+
+
+}
+let toggleMic = async (event) => {
+    if (localTracks[0].muted) {
+        await localTracks[0].setMuted(false)
+        event.target.style.background = '#fff'
+    } else{
+        await localTracks[0].setMuted(true)
+        event.target.style.background = 'rgba(255, 80, 80)'
+    }
+
+
+}
+
 joinAndDisplayLocalStream()
+document.getElementById('leave-btn').addEventListener('click', leaveAndRemoveLocalStream)
+document.getElementById('camera-btn').addEventListener('click', toggleCamera)
+document.getElementById('mic-btn').addEventListener('click', toggleMic)
