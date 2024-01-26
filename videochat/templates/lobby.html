@@ -1,32 +1,54 @@
 {% extends '_partials/_base.html' %}
 {% load static %}
 {% block content %}
-<h1>Lobby</h1>
 
 <main>
     <section id="form-container">
         <img id="logo" src="{% static 'images/chat-icon.png' %}" alt="">
-        <div>
+        <div id="welcome-message">
             <h1>Hoşgeldiniz!</h1>
             <p>Senin için görüntülü görüşme uygulaması</p>
         </div>
-    
+
         <form id="form">
+            <div class="form-field">
+                <input type="text" name="room" placeholder="Bir oda adı girin..." style="text-transform:uppercase;">
+            </div>
+            <div class="form-field">
+                <input type="text" name="username" placeholder="İsminizi girin..." style="text-transform:uppercase;">
+            </div>
             <div class="form-field">
                 <input type="submit" value="Katıl">
             </div>
         </form>
     </section>
+    
 </main>
 
 <script type="text/javascript">
     let form = document.getElementById("form")
 
     let handleSubmit = async (e) => {
+        console.log('click')
         e.preventDefault()
+        let room = e.target.room.value.toUpperCase()
+        let name = e.target.username.value
+        console.log(name)
+
+        let response = await fetch(`/get_token/?channel=${room}`)
+        let data = await response.json()
+
+        let UID = data.uid
+        let token = data.token
+
+        sessionStorage.setItem('UID', UID)
+        sessionStorage.setItem('token', token)
+        sessionStorage.setItem('room', room)
+        sessionStorage.setItem('name', name)
+
         window.open('/room/', '_self')
     }
-    handleSubmit()
+
     form.addEventListener('submit', handleSubmit)
 
 </script>
